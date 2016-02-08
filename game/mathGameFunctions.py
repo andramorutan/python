@@ -20,9 +20,9 @@ def getUserScore(userName):
 
 def updateUserScore(userName, newScore):
 	previousScore = getUserScore(userName)
-	if  previousScore != None and newScore > previousScore:
+	if  previousScore is not None and newScore > previousScore:
 		updateFileScore(userName, newScore)
-	elif previousScore == None:
+	elif previousScore is None:
 		u = open('userScores.txt', 'a')
 		size = os.stat('userScores.txt').st_size
 		newScoreLine = "\n%s %d\n" %(userName, newScore) if size > 0  else "%s %d\n" %(userName, newScore) 
@@ -61,20 +61,21 @@ def updateFileScore(userName, newScore):
 def getHighScores():
 	try:
 		u = open('userScores.txt', 'r')
+		scores = {}
+		for line in u:
+			splits = line.split(" ")
+			scores[splits[0]] = splits[1]
+		
+		sortedScores = sorted(scores.items(), key=operator.itemgetter(1))
+		print("_____________________")
+		print("No.  UserName Score     ")
+		print("_____________________")
+		for index, i in enumerate(sortedScores):
+			print("%3d%9s%8d" %(index + 1, i[0], int(i[1])))
 	except IOError:
 		print("No scores yet...")
 		u = open('userScores.txt', 'w')
-	scores = {}
-	for line in u:
-		splits = line.split(" ")
-		scores[splits[0]] = splits[1]
-	u.close()	
-	sortedScores = sorted(scores.items(), key=operator.itemgetter(1))
-	print("_____________________")
-	print("No.  UserName Score     ")
-	print("_____________________")
-	for index, i in enumerate(sortedScores):
-		print("%3d%9s%8d" %(index + 1, i[0], int(i[1])))
+	u.close()
 		
 	
 
@@ -97,7 +98,7 @@ def correctAnswer(expression, answer):
 def question(score):
 	expression = generateExpression()
 	print("Question: %s" %(expression.replace("**", "^")))
-	if score == None:
+	if score is None:
 		score = int(0)
 	while True:
 		try:
