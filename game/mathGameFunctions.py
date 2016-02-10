@@ -25,18 +25,18 @@ def updateUserScore(userName, newScore):
 	elif previousScore is None:
 		u = open('userScores.txt', 'a')
 		size = os.stat('userScores.txt').st_size
-		newScoreLine = "\n%s %d\n" %(userName, newScore) if size > 0  else "%s %d\n" %(userName, newScore) 
+		newScoreLine = "\n{} {}\n".format(userName, newScore) if size > 0 else "{} {}\n".format( userName, newScore) 
 		print(newScoreLine+"a")
 		u.write(newScoreLine)
 		u.close()			
 	elif previousScore == newScore:
-		print("%s, Congrats you've achieved your best score" %(userName))
+		print("{}, Congrats you've achieved your best score".format({}))
 	else:
-		print("%s, You've done better before...You have %d points to achieve your best score" %(userName, previousScore - newScore))
+		print("{userName}, You've done better before...You have {score} points to achieve your best score".format(userName = userName, score = previousScore - newScore))
 	return
 
 def updateFileScore(userName, newScore):
-	print("%s, Congrats you've achieved your best score" %(userName))
+	print("{}, Congrats you've achieved your best score".format(userName))
 	u = open('userScores.txt', 'r');
 	newFile = ""
 	lineNr = 0
@@ -46,11 +46,11 @@ def updateFileScore(userName, newScore):
 		lineStrings = line.split()
 		if lineStrings[0] == userName:
 			userLineNr = lineNr
-			newFile += "%s %d" %(lineStrings[0], newScore)
+			newFile += "{} {}".format(lineStrings[0], newScore)
 		else:
 			newFile += line
 	if userLineNr == -1:
-		newFile += "%s %d" %(userName, newScore)
+		newFile += "{} {}".format(userName, newScore)
 	if userLineNr != lineNr:
 		newFile += "\n"
 	u.close()
@@ -97,7 +97,7 @@ def correctAnswer(expression, answer):
 
 def question(score):
 	expression = generateExpression()
-	print("Question: %s" %(expression.replace("**", "^")))
+	print("Question: {}".format(expression.replace("**", "^")))
 	if score is None:
 		score = int(0)
 	while True:
@@ -105,10 +105,10 @@ def question(score):
 			answer = int(input("Answer:"))
 			if correctAnswer(expression, answer):
 				score += 10
-				print("You got 10 points for the Question.\nYou now have %d points\n\n" %(score))
+				print("You got 10 points for the Question.\nYou now have {} points\n\n".format(score))
 			else:
 				score = score - 5 if score > 5 else 0
-				print("Your score has been decreased by 5 points.\nYou now have %d points\n\n" %(score))
+				print("Your score has been decreased by 5 points.\nYou now have {} points\n\n".format(score))
 			break
 		except TypeError:
 			print("Please enter a number")
